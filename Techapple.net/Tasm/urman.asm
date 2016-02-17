@@ -55,17 +55,45 @@ main:
 	mov		ah,00	
 	int		16h			;wait for keyboard
 	
+	
 	cmp 	ah,1fh
-	je 		left
+	je		left
+	
+	cmp 	ah,22h
+	je		right
 	
 	mov		ah, 0Ch
 	mov		al,0
 	int		21h
-
+	
 	ret
 	
 	left:
+		mov     ah, 09h    
+        mov     al, chartemp
+        mov     bh, 00h
+        mov     bl, 00h
+        mov     cx, 0001h
+		int     10h
+			
+		mov     ah, 01h
+		mov     cx, 2607h
+		int     10h
 	inc		column
+	ret
+	
+	right:
+		mov     ah, 09h    
+        mov     al, chartemp
+        mov     bh, 00h
+        mov     bl, 00h
+        mov     cx, 0001h
+		int     10h
+			
+		mov     ah, 01h
+		mov     cx, 2607h
+		int     10h
+	dec		column
 	ret
 	
 
