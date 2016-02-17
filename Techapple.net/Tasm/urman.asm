@@ -1,13 +1,8 @@
 .model  tiny
 .data
-head      		db      0 	;First letter 
-follow      	db      0 	;Other letter
-start   		db      0	;Start row 
-endr       		db      25	;End row
-apick			db		0
-column    		db      0 
-stop    		db      100	;Stop falling
-chartemp		db		0d
+row      		db      24 	;First letter 
+column    		db      40 
+chartemp		db		65d
 
 .code
     org     0100h
@@ -17,36 +12,28 @@ main:
     mov     al, 03h
     int     10h
 
-	mov 	si, offset staticdrop
-
     rosesfall:
             mov     ah, 02h     ;Move cursor XY
             mov     bh, 00h
-            mov     dh, head      ;y
+            mov     dh, row      ;y
             mov     dl, column    ;x
+
             int     10h
-		
 		
 			;Color State
             mov     ah, 09h    
             mov     al, chartemp
             mov     bh, 00h
-            mov     bl, 0fh
+            mov     bl, 0Dh
             mov     cx, 0001h
-            int     10h
-        end1:
-		
-		mov 	ah,	staticascii + [2]
-		mov 	chartemp,ah
-		
-        
-		;Switch Column
-        mov 	ah,prsnt
-        cmp 	ah,maxcol
-        ja 		endcolumnloop
-        jmp 	columnloop
-        endcolumnloop:
 
+            int     10h
+			
+			mov     ah, 01h
+			mov     cx, 2607h
+            int     10h
+			
+	
     ;Delay
     mov 	di, 5
     mov 	ah, 0
