@@ -1,0 +1,15 @@
+	; choose to escape
+	mov ah,01h
+	cmp al,1Bh
+	je endprog
+		
+	int 21h
+	jmp outprog
+	endprog:
+		
+	mov     ah, 00h         
+        	mov     al, 03h 
+        	int     10h    
+	int 	20h	
+	outprog:
+	;======================	
