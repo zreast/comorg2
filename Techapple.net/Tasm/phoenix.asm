@@ -66,11 +66,16 @@
 	ret		
 	
 	delay:	   
-		mov     CX, 00h    ;---------delay-------
-		mov     DX, 4240h
-		mov     AH, 86H
-		INT     15H 	   
-	ret  
+	mov 	di, 5
+    mov 	ah, 0
+    int 	1Ah
+    mov 	bx, dx
+    delayy:
+        mov 	ah, 0
+        int 	1Ah
+        sub 	dx, bx
+        cmp 	di, dx
+        ja 		delayy
 		  
 		   
     Move_cursor_XY:		; 
