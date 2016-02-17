@@ -140,13 +140,12 @@ main:
 	move:
 	mov		ah,00	
 	int		16h			;wait for keyboard
-	
-	
+
 	cmp 	ah,1fh
-	je		left
+	je		right
 	
 	cmp 	ah,22h
-	je		right
+	je		left
 	
 	mov		ah, 0Ch
 	mov		al,0
