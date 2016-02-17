@@ -20,20 +20,20 @@ main:
 
             int     10h
 		
-			;Color State
+			;Player State
             mov     ah, 09h    
             mov     al, chartemp
             mov     bh, 00h
             mov     bl, 0Ch
             mov     cx, 0001h
-
-            int     10h
+			int     10h
 			
 			mov     ah, 01h
 			mov     cx, 2607h
             int     10h
 			
-	
+			call	move;
+			
     ;Delay
     mov 	di, 5
     mov 	ah, 0
@@ -50,5 +50,23 @@ main:
     jmp 	rosesfall
 
 	ret
+	
+	move:
+	mov		ah,00	
+	int		16h			;wait for keyboard
+	
+	cmp 	ah,1fh
+	je 		left
+	
+	mov		ah, 0Ch
+	mov		al,0
+	int		21h
+
+	ret
+	
+	left:
+	inc		column
+	ret
+	
 
 end	main
