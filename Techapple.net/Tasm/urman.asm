@@ -2,7 +2,7 @@
 .data
 row      		db      24 	;First letter 
 column    		db      40 
-chartemp		db		65d
+chartemp		db		88d
 
 .code
     org     0100h
@@ -24,7 +24,7 @@ main:
             mov     ah, 09h    
             mov     al, chartemp
             mov     bh, 00h
-            mov     bl, 0Dh
+            mov     bl, 0Ch
             mov     cx, 0001h
 
             int     10h
