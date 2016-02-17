@@ -155,17 +155,119 @@ main:
 	ret
 	
 	left:
-	mov     ah, 00h         ; Set to 80x25
-    mov     al, 03h
-    int     10h
+	call	writeblack
 	inc		column
 	ret
 	
 	right:
-	mov     ah, 00h         ; Set to 80x25
-    mov     al, 03h
-    int     10h
+	call	writeblack
 	dec		column
+	ret
+	
+	writeblack:
+	mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, row      ;y
+            mov     dl, column    ;x
+
+            int     10h
+		
+			;Player State
+            mov     ah, 09h    
+            mov     al, chartemp
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+			mov		al, row
+			sub		al,1
+			
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, al     ;y
+            mov     dl, column    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 143d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+			mov		al, column
+			sub		al,1
+			
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, row     ;y
+            mov     dl, al    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 92d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+			mov		al, column
+			add		al,1
+			
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, row     ;y
+            mov     dl, al    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 47d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+			mov		al, column
+			sub		al,1
+			
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, rowsub     ;y
+            mov     dl, al    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 47d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+			mov		al, column
+			add		al,1
+			
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, rowsub     ;y
+            mov     dl, al    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 92d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+			mov     ah, 01h
+			mov     cx, 2607h
+            int     10h
 	ret
 	
 
