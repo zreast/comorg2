@@ -64,25 +64,25 @@ screenmenu:
 		int		21h	
 		cmp		al,27			;COMPARE WITH ESC
 		jne		no1			;IF NOT EQUAL GO CHANGE COLOR
-		je		outprog			;IF EQUAL END PROGRAM		
+		call		outprog			;IF EQUAL END PROGRAM		
 		no1:
 		
 		cmp		al,49			;COMPARE WITH 1
 		jne		no2				;if not choose go to no2 for change color \continune
-		je		rosesfall		;if chose 1 go to xwing
+		call		rosesfall		;if chose 1 go to xwing
 		no2:
 		
 		cmp		al,50			;COMPARE WITH 2
 		jne		no3				;if not choose go to no2 for change color \continune
-		je		rosesfall		;if chose 1 go to xwing	
+		call		rosesfall		;if chose 1 go to xwing	
 		no3:
 		
 		cmp		al,51			;COMPARE WITH 3
 		jne	delay2			;if not choose go to no2 for change color \continune
-		je		rosesfall		;if chose 1 go to xwing		
+		call		rosesfall		;if chose 1 go to xwing		
 		
 		delay2:	   				;DELAY WHO CARE
-		mov 	di, 40
+		mov 	di, 25
 		mov 	ah, 0
 		int 	1Ah
 		mov 	bx, dx
@@ -103,14 +103,19 @@ screenmenu:
         mov     al, 03h 
         int     10h  
 		int		20h
+		ret
 	ret			;return to call
 
 	;================MENU End here=======================
+	
+	
+			
 	
     rosesfall:
 			mov     ah, 00h         ; Set to 80x25
 			mov     al, 03h
 			int     10h
+			
 			
 			
 			
@@ -120,6 +125,10 @@ screenmenu:
             mov     dl, column    ;x
 
             int     10h
+			
+			
+			
+			
 		
 			;Player State
             mov     ah, 09h    
@@ -237,6 +246,7 @@ screenmenu:
 
 	ret
 	
+	
 	move:
 	mov		ah,00	
 	int		16h			;wait for keyboard
@@ -246,6 +256,9 @@ screenmenu:
 	
 	cmp 	ah,22h
 	je		left
+	
+	cmp		ah,01h
+	call	outprog
 	
 	mov		ah, 0Ch
 	mov		al,0
@@ -367,6 +380,8 @@ screenmenu:
 			mov     ah, 01h
 			mov     cx, 2607h
             int     10h
+			
+			
 	ret
 	
 
