@@ -1,5 +1,6 @@
 .model  tiny
 .data
+cur				db		?
 row      		db      23
 column    		db      40
 rowsub			db		24
@@ -23,14 +24,16 @@ main:
 	
 			
 	call	screenmenu
-	
+	barchelor:
+	mov     ah, 00h         ; Set to 80x25
+	mov     al, 03h
+	int     10h
     rosesfall:
-			mov     ah, 00h         ; Set to 80x25
-			mov     al, 03h
-			int     10h
+			
 			
 			call	writeunit
 			call	move
+			call	drawlaser
 			
     ;Delay
     mov 	di, 1
@@ -321,17 +324,17 @@ main:
 		
 		cmp		al,49			;COMPARE WITH 1
 		jne		no2				;if not choose go to no2 for change color \continune
-		call	rosesfall		;if chose 1 go to xwing
+		call	barchelor		;if chose 1 go to xwing
 		no2:
 		
 		cmp		al,50			;COMPARE WITH 2
 		jne		no3				;if not choose go to no2 for change color \continune
-		call		rosesfall		;if chose 1 go to xwing	
+		call	barchelor		;if chose 1 go to xwing	
 		no3:
 		
 		cmp		al,51			;COMPARE WITH 3
 		jne	delay2			;if not choose go to no2 for change color \continune
-		call		rosesfall		;if chose 1 go to xwing		
+		call	barchelor		;if chose 1 go to xwing		
 		
 		delay2:	   				;DELAY WHO CARE
 		mov 	di, 25
@@ -464,6 +467,38 @@ main:
 			mov     ah, 01h
 			mov     cx, 2607h
             int     10h
+	ret
+	
+	drawlaser:
+	
+	mov	al,21
+	mov	cur,al
+	xor	cx,cx
+	drawing:
+	
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, cur     ;y
+            mov     dl, column    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 179d
+            mov     bh, 00h
+            mov     bl, 0Ch
+            mov     cx, 0001h
+			int     10h
+			
+			mov     ah, 01h
+			mov     cx, 2607h
+            int     10h
+			
+	mov	al,cur
+	dec	al
+	mov	cur,al
+	or	al,al
+	jnz	drawing
 	ret
 	
 
