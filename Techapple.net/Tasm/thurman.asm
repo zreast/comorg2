@@ -46,10 +46,10 @@ screenmenu:
 		
 		msg1end:
 			
-		add 	si,1
+		add 	bl,2
 		mov 	al,0
 		mov 	bh,0
-		mov 	bl, [si]
+		;mov 	bl, 1
 		mov 	cx, 29		;legnth of char
 		mov 	dl,	26		;column
 		mov 	dh, 12 		;row
@@ -246,18 +246,18 @@ screenmenu:
 
 	ret
 	
-	
+	;============== Control============
 	move:
 	mov		ah,00	
 	int		16h			;wait for keyboard
 
-	cmp 	ah,1fh
+	cmp 	ah,1fh		; press s to move left
 	je		right
 	
-	cmp 	ah,22h
+	cmp 	ah,22h		; press g to move left
 	je		left
 	
-	cmp		ah,01h
+	cmp		ah,01h		; exit
 	call	outprog
 	
 	mov		ah, 0Ch
