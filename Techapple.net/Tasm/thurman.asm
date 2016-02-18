@@ -304,14 +304,26 @@ screenmenu:
 		
 	ret	
 	paddscore2 :
+		mov		ah,2		;set cursor position	
+		mov		dl,77		;column
+		mov		dh,0		;row
+		mov		bh,0
+		int		10h
 		
+		mov		ah,09h
+		mov		bh,0
+		mov		al,numbers2
+		mov		bl,3
+		mov		cx,1
+		int		10h
+	ret	
 	;score db	'1'
 	;============== Control============
 	move:
 	; call add score// addscore = 1 point
 	call	printscore
 	call	paddscore
-	
+	call	paddscore2 
 	
 	
 	mov		ah,00	
