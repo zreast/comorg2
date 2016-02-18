@@ -1,6 +1,8 @@
 .model  tiny
 .data
+
 cur				db		?
+delcol			db		-1
 row      		db      23
 column    		db      40
 rowsub			db		24
@@ -28,12 +30,20 @@ main:
 	mov     ah, 00h         ; Set to 80x25
 	mov     al, 03h
 	int     10h
+	
+	
+	mov si,0  ;set  register pointer array at 0     
+	call readtime 
+    call random_fist	
+	
     rosesfall:
-			
-			
-			call	writeunit
-			call	move
-			call	drawlaser
+	call Move_cursor_XY   
+	call print_line	
+	
+	call	writeunit
+	call	move
+	call	dellaser
+	call	drawlaser
 			
     ;Delay
     mov 	di, 1
@@ -148,6 +158,12 @@ main:
 	call	paddscore2 
 	call	Your_Soul_is_Mine
 	
+	;Skip if no input
+	mov		ah, 0Bh
+	int		21h
+	cmp		al,00
+	je		skip
+	
 	mov		ah,00	
 	int		16h			;wait for keyboard
 
@@ -159,13 +175,11 @@ main:
 	
 	cmp		ah,01h		; exit
 	je		outprog2
-	
-	
-	
+
 	mov		ah, 0Ch
 	mov		al,0
 	int		21h
-	
+	skip:
 	ret
 	
 	outprog2:
@@ -177,6 +191,8 @@ main:
 	
 	left:
 	call	writeblack
+	mov		al,column
+	mov		delcol,al
 	inc		column
 	call	addscore
 	
@@ -184,6 +200,8 @@ main:
 	
 	right:
 	call	writeblack	
+	mov		al,column
+	mov		delcol,al
 	dec		column
 	call	addscore
 	
@@ -513,16 +531,172 @@ main:
             mov     cx, 0001h
 			int     10h
 			
-			mov     ah, 01h
-			mov     cx, 2607h
-            int     10h
-			
 	mov	al,cur
 	dec	al
 	mov	cur,al
 	or	al,al
 	jnz	drawing
+	mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, 0     ;y
+            mov     dl, column    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 179d
+            mov     bh, 00h
+            mov     bl, 0Ch
+            mov     cx, 0001h
+			int     10h
 	ret
 	
+	dellaser:
+	
+	mov	al,21
+	mov	cur,al
+	xor	cx,cx
+	deleting:
+	
+			mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, cur     ;y
+            mov     dl, delcol    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 179d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+			
+	mov	al,cur
+	dec	al
+	mov	cur,al
+	or	al,al
+	jnz	deleting
+	mov     ah, 02h     ;Move cursor XY
+            mov     bh, 00h
+            mov     dh, 0     ;y
+            mov     dl, delcol    ;x
+
+            int     10h
+		
+            mov     ah, 09h    
+            mov     al, 179d
+            mov     bh, 00h
+            mov     bl, 00h
+            mov     cx, 0001h
+			int     10h
+	ret
+	
+	random_fist:   ;random at first time	 
+	     set_number:
+			call delay
+			add random_number,3
+			call readtime
+			call random_minus_position		 
+			inc si	
+			add x,1
+			cmp x,80  
+	   Jl set_number			 
+		mov si,0 
+		mov x,0	 
+    RET
+	
+	readtime:
+		  mov ah, 2ch
+		  int 21h            
+		  mov byte ptr StackRandom, dl 
+	 RET 
+	 
+	 random_minus_position:  		  
+          mov ax, [StackRandom]
+          mov bx, random_number
+          mul bx                  
+          add ax, word ptr x               
+          mov bx, 35
+          div bx           	  
+          mov y[si]	,dl	                 
+		  sub y[si],35
+          cmp random_number,99 
+          jne set_random_number
+               mov random_number,0  
+             set_random_number:
+     RET
+	
+	Move_cursor_XY:		; 
+		mov     ah, 02h         ; Move cursor XY
+		mov     bh, 00h             
+		mov     dh, y[si]
+	    mov     dl, x
+        int     10h 
+	RET  
+	
+	print_line:		
+			call Write_soft_green		
+			sub y[si],1
+			call Move_cursor_XY  		
+            call Write_soft_green		
+			sub y[si],1
+			call Move_cursor_XY 		
+			call Write_soft_green			
+			sub y[si],1			
+			call Move_cursor_XY		
+			call Write_soft_green			
+			sub y[si],1			
+			call Move_cursor_XY		
+			call Write_soft_green			
+			sub y[si],1			
+			call Move_cursor_XY		
+			call Write_soft_green			
+			sub y[si],1			
+			call Move_cursor_XY			
+			call Write_soft_green			
+			sub y[si],1			
+			call Move_cursor_XY			
+			call Write_soft_green			
+			sub y[si],1			
+			call Move_cursor_XY			
+			call Write_soft_green		
+			sub y[si],1			
+			call Move_cursor_XY		
+			call Write_soft_green		
+			sub y[si],1			
+			call Move_cursor_XY		
+			call Write_soft_green		
+			add y[si],11			
+			jne set_random_number3
+              mov random_number,0  
+          set_random_number3:
+	RET  
+	
+	Write_soft_green:
+	  call random_ascii
+        mov     ah, 09h         ; Write a soft green colored char
+        mov     al, char_Random
+        mov     bh, 00h
+        mov     bl, 0ah
+        mov     cx, 0001h
+        int     10h 
+	RET
+	
+	random_ascii:
+		  mov ax, [StackRandom]
+          mov bx, random_number
+          mul bx                  ; RND = RAND*P1
+          add ax, word ptr x            ; RAND += P2      
+          mov bx, 93      
+          div bx            ; divition		  
+          mov char_Random	,dl	                 
+		  add char_Random,33		  
+		  add random_number,1		  
+          cmp random_number,99 
+          jne set_random_number2
+              mov random_number,0  
+          set_random_number2:
+	 RET
 
 end	main
