@@ -275,12 +275,13 @@ screenmenu:
 		mov		bh,0
 		int		10h
 		
-		mov		al,numbers
-		add		al,1		;add score point
-		mov		numbers,al
+		
 		mov		ah,09h		;write character
 		;mov		al,48
 		mov		bh,0
+		mov		al,numbers
+		add		al,1		;add score point
+		mov		numbers,al
 		mov		bl,3
 		mov		cx,1
 		int		10h
@@ -322,12 +323,12 @@ screenmenu:
 	left:
 	call	writeblack
 	inc		column
+	call	addscore
 	
 	ret
 	
 	right:
-	call	writeblack
-	
+	call	writeblack	
 	dec		column
 	
 	
