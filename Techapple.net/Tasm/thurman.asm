@@ -5,7 +5,7 @@ column    		db      40
 rowsub			db		24
 chartemp		db		85d
 key 			db 		0
-
+numbers		db		47
  stackrandom       dw 0
    random_number	 dw 8
    X                 db  0
@@ -42,8 +42,8 @@ screenmenu:
 		mov 	cx, 44		;legnth of char
 		mov 	dl,	19		;column
 		mov 	dh, 10 		;row
-		push 	cs
-		push 	es
+		;push 	cs
+		;push 	es
 		mov 	bp,  offset msg1
 		mov 	ah, 13h
 		int 	10h
@@ -252,19 +252,57 @@ screenmenu:
 
 	ret
 	
+	printscore:
+		;mov		si,1
+		mov 	al,1
+		mov 	bh,0
+		mov 	bl, 3
+		mov 	cx, 8		;legnth of char
+		mov 	dl,	69		;column
+		mov 	dh, 0 		;row
+		;push 	cs			; don't ask me what's this
+		;push 	es			; don't ask me what's this
+		mov 	bp,  offset scorew
+		mov 	ah, 13h
+		int 	10h
+		ret
+	scorew db "SCORE : "
+	
+	addscore:
+		mov		ah,2		;set cursor position	
+		mov		dl,77		;column
+		mov		dh,2		;row
+		mov		bh,0
+		int		10h
+		
+		mov		al,numbers
+		add		al,1		;add score point
+		mov		numbers,al
+		mov		ah,09h		;write character
+		;mov		al,48
+		mov		bh,0
+		mov		bl,3
+		mov		cx,1
+		int		10h
+		ret
+	;score db	'1'
 	;============== Control============
 	move:
+	; call add score// addscore = 1 point
+	call	printscore
+	
+	
 	mov		ah,00	
 	int		16h			;wait for keyboard
 
-	cmp 	ah,1fh		; press s to move left
+	cmp 	ah,1fh		; press s to move left	
 	je		right
 	
 	cmp 	ah,22h		; press g to move left
 	je		left
 	
 	cmp		ah,01h		; exit
-	je	outprog2
+	je		outprog2
 	
 	
 	
@@ -284,11 +322,15 @@ screenmenu:
 	left:
 	call	writeblack
 	inc		column
+	
 	ret
 	
 	right:
 	call	writeblack
+	
 	dec		column
+	
+	
 	ret
 	
 	writeblack:
