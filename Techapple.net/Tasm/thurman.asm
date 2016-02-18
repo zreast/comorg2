@@ -32,7 +32,7 @@ screenmenu:
 		mov		si,1
 		mov 	al,1
 		mov 	bh,0
-		mov 	bl, 4
+		mov 	bl, 3
 		mov 	cx, 44		;legnth of char
 		mov 	dl,	19		;column
 		mov 	dh, 10 		;row
@@ -82,7 +82,7 @@ screenmenu:
 		je		rosesfall		;if chose 1 go to xwing		
 		
 		delay2:	   				;DELAY WHO CARE
-		mov 	di, 10
+		mov 	di, 40
 		mov 	ah, 0
 		int 	1Ah
 		mov 	bx, dx
