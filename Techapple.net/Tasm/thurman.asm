@@ -29,7 +29,7 @@ screenmenu:
 		mov     cx, 2607h  	; hide cursr
          int     10h
 		
-		mov		si,0100b
+		mov		si,1
 		mov 	al,1
 		mov 	bh,0
 		mov 	bl, 4
