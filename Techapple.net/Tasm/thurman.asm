@@ -40,6 +40,26 @@ main:
 	call Move_cursor_XY   
 	call print_line	
 	
+	sub y[si],11       
+    call Move_cursor_XY  				   
+    call Ereas_char				   
+    add y[si],11 
+	
+	cmp y[si],36
+    JLE clearY 
+       call random_minus_position
+       add random_number,1 
+    clearY: 	
+
+	inc si	
+	add x,1
+	cmp x,80  
+	Jne rosesfall
+	mov x,0 
+	mov si,0  
+	
+	call readtime	
+	
 	call	writeunit
 	call	move
 	call	dellaser
@@ -698,5 +718,14 @@ main:
               mov random_number,0  
           set_random_number2:
 	 RET
+	 
+	 Ereas_char:
+		mov     ah, 09h         ; Ereas char
+        mov     al, '8'
+        mov     bh, 00h
+        mov     bl, 00h
+        mov     cx, 0001h
+        int     10h
+	RET		
 
 end	main
