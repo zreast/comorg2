@@ -5,7 +5,8 @@ column    		db      40
 rowsub			db		24
 chartemp		db		85d
 key 			db 		0
-numbers		db		47
+numbers		db		48
+numbers2		db		48
  stackrandom       dw 0
    random_number	 dw 8
    X                 db  0
@@ -285,12 +286,32 @@ screenmenu:
 		mov		bl,3
 		mov		cx,1
 		int		10h
-		ret
+	ret	
+	paddscore:
+		mov		ah,2		;set cursor position	
+		mov		dl,78		;column
+		mov		dh,0		;row
+		mov		bh,0
+		int		10h
+		
+		mov		ah,09h
+		mov		bh,0
+		mov		al,numbers
+		mov		bl,3
+		mov		cx,1
+		int		10h
+		
+		
+	ret	
+	paddscore2 :
+		
 	;score db	'1'
 	;============== Control============
 	move:
 	; call add score// addscore = 1 point
 	call	printscore
+	call	paddscore
+	
 	
 	
 	mov		ah,00	
@@ -330,7 +351,7 @@ screenmenu:
 	right:
 	call	writeblack	
 	dec		column
-	
+	call	addscore
 	
 	ret
 	
