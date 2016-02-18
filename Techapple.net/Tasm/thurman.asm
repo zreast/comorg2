@@ -80,11 +80,19 @@ main:
 		;mov		al,48
 		mov		bh,0
 		mov		al,numbers
+		;push	al
 		add		al,1		;add score point
 		mov		numbers,al
 		mov		bl,3
 		mov		cx,1
 		int		10h
+		cmp		al,5
+		jne		next
+		mov		numbers,48
+		add		numbers2,1
+	next:
+		
+		
 	ret	
 	paddscore:
 		mov		ah,2		;set cursor position	
