@@ -86,7 +86,7 @@ main:
 		mov		bl,3
 		mov		cx,1
 		int		10h
-		cmp		al,5
+		cmp		al,58
 		jne		next
 		mov		numbers,48
 		add		numbers2,1
@@ -94,7 +94,7 @@ main:
 		
 		
 	ret	
-	paddscore:
+	paddscore:				;show score
 		mov		ah,2		;set cursor position	
 		mov		dl,78		;column
 		mov		dh,0		;row
@@ -110,7 +110,7 @@ main:
 		
 		
 	ret	
-	paddscore2 :
+	paddscore2 :			;show score
 		mov		ah,2		;set cursor position	
 		mov		dl,77		;column
 		mov		dh,0		;row
@@ -124,6 +124,21 @@ main:
 		mov		cx,1
 		int		10h
 	ret	
+	Your_Soul_is_Mine:		;show hp
+		;mov		si,1
+		mov 	al,1
+		mov 	bh,0
+		mov 	bl, 3
+		mov 	cx, 5		;legnth of char
+		mov 	dl,	67		;column
+		mov 	dh, 1 		;row		
+		mov 	bp,  offset mylife
+		mov 	ah, 13h
+		int 	10h
+		ret
+	mylife db "HP : "
+	ret	
+	
 	;score db	'1'
 	;============== Control============
 	move:
@@ -131,7 +146,7 @@ main:
 	call	printscore
 	call	paddscore
 	call	paddscore2 
-	
+	call	Your_Soul_is_Mine
 	
 	mov		ah,00	
 	int		16h			;wait for keyboard
