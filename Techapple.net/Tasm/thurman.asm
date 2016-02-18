@@ -271,7 +271,7 @@ screenmenu:
 	addscore:
 		mov		ah,2		;set cursor position	
 		mov		dl,77		;column
-		mov		dh,2		;row
+		mov		dh,0		;row
 		mov		bh,0
 		int		10h
 		
