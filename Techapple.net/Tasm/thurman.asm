@@ -4,7 +4,13 @@ row      		db      23
 column    		db      40
 rowsub			db		24
 chartemp		db		85d
-key db 0
+key 			db 		0
+
+ stackrandom       dw 0
+   random_number	 dw 8
+   X                 db  0
+   Y                 db  80 DUP (?)
+   char_Random       db  133 
  msg2 	db "  1:easy / 2:normal / 3:hard "
 .code
     org     0100h
@@ -64,12 +70,12 @@ screenmenu:
 		int		21h	
 		cmp		al,27			;COMPARE WITH ESC
 		jne		no1			;IF NOT EQUAL GO CHANGE COLOR
-		call		outprog			;IF EQUAL END PROGRAM		
+		call	outprog			;IF EQUAL END PROGRAM		
 		no1:
 		
 		cmp		al,49			;COMPARE WITH 1
 		jne		no2				;if not choose go to no2 for change color \continune
-		call		rosesfall		;if chose 1 go to xwing
+		call	rosesfall		;if chose 1 go to xwing
 		no2:
 		
 		cmp		al,50			;COMPARE WITH 2
@@ -258,13 +264,22 @@ screenmenu:
 	je		left
 	
 	cmp		ah,01h		; exit
-	call	outprog
+	je	outprog2
+	
+	
 	
 	mov		ah, 0Ch
 	mov		al,0
 	int		21h
 	
 	ret
+	
+	outprog2:
+		mov     ah, 00h         ; Set to 80x25
+        mov     al, 03h 
+        int     10h  
+		int		20h
+		ret
 	
 	left:
 	call	writeblack
