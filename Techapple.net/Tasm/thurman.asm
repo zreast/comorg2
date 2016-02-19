@@ -1,8 +1,12 @@
 .model  tiny
 .data
+point			dw		?
+laserfade		db		0
+lasertoggle		db		0
 counttime		db		0
 cur				db		?
 delcol			db		-1
+oldcol			db		-1
 row      		db      23
 column    		db      40
 rowsub			db		24
@@ -77,13 +81,23 @@ main:
 	
 	call readtime	
 	
+	call	writeblack
 	call	writeunit
-	call	move
 	call	dellaser
+	cmp		lasertoggle,0
+	je		nolaser
+	not		laserfade
 	call	drawlaser
+	call	checkcollision
+	nolaser:
+	call	move
+	call	printscore
+	call	paddscore
+	call	paddscore2 
+	call	Your_Soul_is_Mine
 			
     ;Delay
-    mov 	di, 3
+    mov 	di, 1
     mov 	ah, 0
     int 	1Ah
     mov 	bx, dx
@@ -97,6 +111,15 @@ main:
 	;Infinite Loop
     jmp 	rosesfall
 
+	ret
+	
+	checkcollision:
+	push	si
+	mov		si,TYPE column
+	mov		y[si],-5
+	pop		si
+	call	addscore
+	
 	ret
 	
 	printscore:
@@ -189,12 +212,7 @@ main:
 	;score db	'1'
 	;============== Control============
 	move:
-	; call add score// addscore = 1 point
-	call	printscore
-	call	paddscore
-	call	paddscore2 
-	call	Your_Soul_is_Mine
-	
+	; call add score// addscore = 1 point	
 	;Skip if no input
 	mov		ah, 0Bh
 	int		21h
@@ -204,11 +222,14 @@ main:
 	mov		ah,00	
 	int		16h			;wait for keyboard
 
-	cmp 	ah,1fh		; press s to move left	
+	cmp 	ah,1eh		; press s to move left	
 	je		right
 	
-	cmp 	ah,22h		; press g to move left
+	cmp 	ah,20h		; press g to move left
 	je		left
+	
+	cmp 	ah,39h		; press g to move left
+	je		laser
 	
 	cmp		ah,01h		; exit
 	je		outprog2
@@ -226,21 +247,25 @@ main:
 		int		20h
 		ret
 	
+	laser:
+	not		lasertoggle
+	ret
+	
 	left:
-	call	writeblack
 	mov		al,column
 	mov		delcol,al
+	mov		al,column
+	mov		oldcol,al
 	inc		column
-	call	addscore
 	
 	ret
 	
 	right:
-	call	writeblack	
 	mov		al,column
 	mov		delcol,al
+	mov		al,column
+	mov		oldcol,al
 	dec		column
-	call	addscore
 	
 	ret
 	
@@ -248,7 +273,7 @@ main:
 	mov     ah, 02h     ;Move cursor XY
             mov     bh, 00h
             mov     dh, row      ;y
-            mov     dl, column    ;x
+            mov     dl, oldcol    ;x
 
             int     10h
 		
@@ -266,7 +291,7 @@ main:
 			mov     ah, 02h     ;Move cursor XY
             mov     bh, 00h
             mov     dh, al     ;y
-            mov     dl, column    ;x
+            mov     dl, oldcol    ;x
 
             int     10h
 		
@@ -277,7 +302,7 @@ main:
             mov     cx, 0001h
 			int     10h
 			
-			mov		al, column
+			mov		al, oldcol
 			sub		al,1
 			
 			mov     ah, 02h     ;Move cursor XY
@@ -294,7 +319,7 @@ main:
             mov     cx, 0001h
 			int     10h
 			
-			mov		al, column
+			mov		al, oldcol
 			add		al,1
 			
 			mov     ah, 02h     ;Move cursor XY
@@ -311,7 +336,7 @@ main:
             mov     cx, 0001h
 			int     10h
 			
-			mov		al, column
+			mov		al, oldcol
 			sub		al,1
 			
 			mov     ah, 02h     ;Move cursor XY
@@ -328,7 +353,7 @@ main:
             mov     cx, 0001h
 			int     10h
 			
-			mov		al, column
+			mov		al, oldcol
 			add		al,1
 			
 			mov     ah, 02h     ;Move cursor XY
@@ -660,7 +685,7 @@ main:
 	
 	drawlaser:
 	
-	mov	al,21
+	mov	al,20
 	mov	cur,al
 	xor	cx,cx
 	drawing:
@@ -672,13 +697,18 @@ main:
 
             int     10h
 		
-            mov     ah, 09h    
-            mov     al, 179d
+            mov     ah, 09h
+			cmp		laserfade,0
+			je		fade
+            mov     al, 176d
+			jmp		fade2
+			fade:
+			mov     al, 178d
+			fade2:
             mov     bh, 00h
             mov     bl, 0Ch
             mov     cx, 0001h
 			int     10h
-			
 	mov	al,cur
 	dec	al
 	mov	cur,al
@@ -692,7 +722,13 @@ main:
             int     10h
 		
             mov     ah, 09h    
-            mov     al, 179d
+            cmp		laserfade,0
+			je		fadee
+            mov     al, 176d
+			jmp		fadee2
+			fadee:
+			mov     al, 178d
+			fadee2:
             mov     bh, 00h
             mov     bl, 0Ch
             mov     cx, 0001h
@@ -701,7 +737,7 @@ main:
 	
 	dellaser:
 	
-	mov	al,21
+	mov	al,20
 	mov	cur,al
 	xor	cx,cx
 	deleting:
@@ -783,10 +819,10 @@ main:
 	RET  
 	
 	print_line:		
-			call Write_soft_green		
+			call Write_white
 			sub y[si],1
 			call Move_cursor_XY  		
-            call Write_soft_green		
+            call Write_white
 			sub y[si],1
 			call Move_cursor_XY 		
 			call Write_soft_green			
@@ -807,13 +843,13 @@ main:
 			call Write_soft_green			
 			sub y[si],1			
 			call Move_cursor_XY			
-			call Write_soft_green		
+			call Write_green
 			sub y[si],1			
 			call Move_cursor_XY		
-			call Write_soft_green		
+			call Write_green
 			sub y[si],1			
 			call Move_cursor_XY		
-			call Write_soft_green		
+			call Write_green
 			add y[si],11			
 			jne set_random_number3
               mov random_number,0  
@@ -829,6 +865,26 @@ main:
         mov     cx, 0001h
         int     10h 
 	RET
+	
+	Write_green:
+	   call random_ascii
+        mov     ah, 09h         ; Write a soft green colored char
+        mov     al, char_Random
+        mov     bh, 00h
+        mov     bl, 02h
+        mov     cx, 0001h
+        int     10h 
+	RET
+	
+	Write_white:
+	   call random_ascii
+		mov     ah, 09h         ; Write a white colored char
+        mov     al, char_Random
+        mov     bh, 00h
+        mov     bl, 0Fh
+        mov     cx, 0001h
+        int     10h 
+	RET		
 	
 	random_ascii:
 		  mov ax, [StackRandom]
