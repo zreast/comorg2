@@ -16,6 +16,19 @@ numbers2		db		48
    Y                 db  80 DUP (?)
    char_Random       db  133 
  msg2 	db "  1:easy / 2:normal / 3:hard "
+x1 		db "     _______   ______    __       _______   ______    __   "
+x2 		db "    /  _____| /  __  \  |  |     /  _____| /  __  \  |  |  "
+x3 		db "   |  |  __  |  |  |  | |  |    |  |  __  |  |  |  | |  |  "
+x4 		db "   |  | |_ | |  |  |  | |  |    |  | |_ | |  |  |  | |  |  "
+x5 		db "   |  |__| | |  `--'  | |__|    |  |__| | |  `--'  | |__|  "
+x6 		db "    \______|  \______/  (__)     \______|  \______/  (__)  "
+x7 		db "___   ___      ____    __    ____  __  .__   __.   _______ "
+x8 		db "\  \ /  /      \   \  /  \  /   / |  | |  \ |  |  /  _____|"
+x9 		db " \  V  /   _____\   \/    \/   /  |  | |   \|  | |  |  __  "
+x10 	db "  >   <   |______\            /   |  | |  . `  | |  | |_ | "
+x11 	db " /  .  \          \    /\    /    |  | |  |\   | |  |__| | "
+x12 	db "/__/ \__\          \__/  \__/     |__| |__| \__|  \______| "
+
 .code
     org     0100h
 main:   
@@ -350,8 +363,8 @@ main:
 		mov 	bh,0
 		mov 	bl, 3
 		mov 	cx, 44		;legnth of char
-		mov 	dl,	19		;column
-		mov 	dh, 10 		;row
+		mov 	dl,	18		;column
+		mov 	dh, 17 		;row
 		;push 	cs
 		;push 	es
 		mov 	bp,  offset msg1
@@ -361,19 +374,130 @@ main:
 		 msg1 	db " Please choose your difficulty (ESC to exit)"
 		
 		msg1end:
-			
+		mov 	bl, 0eh
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 3 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x1
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 4 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x2
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 5 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x3
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 6 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x4
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 7 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x5
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 8 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x6
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 9 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x7
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 10 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x8
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 11 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x9
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 12 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x10
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 13 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x11
+		mov 	ah, 13h
+		int 	10h
+		
+		mov 	cx, 59		;legnth of char
+		mov 	dl,	10		;column
+		mov 	dh, 14 		;row
+		push 	cs
+		push 	es
+		mov 	bp,  offset x12
+		mov 	ah, 13h
+		int 	10h
+		
+		colorloop:
 		add 	bl,2
 		mov 	al,0
 		mov 	bh,0
 		;mov 	bl, 1
 		mov 	cx, 29		;legnth of char
 		mov 	dl,	26		;column
-		mov 	dh, 12 		;row
+		mov 	dh, 19 		;row
 		push 	cs
 		push 	es
 		mov 	bp,  offset msg2
 		mov 	ah, 13h
 		int 	10h
+		
+		
 			
 		mov		ah,6			;get char from keyboard
 		mov		dl,255			;INPUTMODE
@@ -412,7 +536,7 @@ main:
         ja 		delayy2
 		
 		
-	jmp		msg1end			;CONTINUE TO CHANGE COLOR
+	jmp		colorloop			;CONTINUE TO CHANGE COLOR
 				
 		outprog:
 		mov     ah, 00h         ; Set to 80x25
