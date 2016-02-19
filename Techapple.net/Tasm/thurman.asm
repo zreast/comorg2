@@ -66,7 +66,7 @@ main:
 	call	drawlaser
 			
     ;Delay
-    mov 	di, 1
+    mov 	di, 3
     mov 	ah, 0
     int 	1Ah
     mov 	bx, dx
@@ -614,7 +614,6 @@ main:
 	
 	random_fist:   ;random at first time	 
 	     set_number:
-			call delay
 			add random_number,3
 			call readtime
 			call random_minus_position		 
