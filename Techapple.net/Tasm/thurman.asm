@@ -1,5 +1,6 @@
 .model  tiny
 .data
+lasertime		db		-1
 point			dw		?
 laserfade		db		0
 lasertoggle		db		0
@@ -89,6 +90,14 @@ main:
 	not		laserfade
 	call	drawlaser
 	call	checkcollision
+	add		lasertime,1
+	cmp		lasertime,3
+	jne		nolaser
+	not		lasertoggle
+	mov		al,column
+	mov		delcol,al
+	call	dellaser
+
 	nolaser:
 	call	move
 	call	printscore
@@ -114,10 +123,8 @@ main:
 	ret
 	
 	checkcollision:
-	push	si
-	mov		si,TYPE column
-	mov		y[si],-5
-	pop		si
+
+	mov		y+[TYPE column],-5
 	call	addscore
 	
 	ret
@@ -249,6 +256,15 @@ main:
 	
 	laser:
 	not		lasertoggle
+	cmp		lasertoggle,0
+	je		dell
+	mov		lasertime,0
+	
+	ret
+	dell:
+	mov		al,column
+	mov		delcol,al
+	call	dellaser
 	ret
 	
 	left:
