@@ -1,6 +1,6 @@
 .model  tiny
 .data
-
+counttime		db		0
 cur				db		?
 delcol			db		-1
 row      		db      23
@@ -50,8 +50,11 @@ main:
     call random_fist	
 	
     rosesfall:
-	call Move_cursor_XY   
+	call Move_cursor_XY 
+	cmp	counttime,80
+	jle	counting
 	call print_line	
+	counting:
 	
 	sub y[si],11       
     call Move_cursor_XY  				   
@@ -64,6 +67,7 @@ main:
        add random_number,1 
     clearY: 	
 
+	inc	counttime
 	inc si	
 	add x,1
 	cmp x,80  
